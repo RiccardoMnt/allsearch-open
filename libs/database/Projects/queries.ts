@@ -8,7 +8,13 @@ import { ProjectRow } from './types';
 
 type InsertProjectRowInput = Omit<
   ProjectRow,
-  'id' | 'created_at' | 'updated_at' | 'is_paused' | 'is_archived' | 'prompts_updated_at'
+  | 'id'
+  | 'created_at'
+  | 'updated_at'
+  | 'is_paused'
+  | 'is_archived'
+  | 'prompts_updated_at'
+  | 'collection_schedule'
 >;
 type UpdateProjectRowInput = Omit<ProjectRow, 'id' | 'created_at' | 'updated_at'>;
 

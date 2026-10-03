@@ -1,0 +1,1 @@
+ALTER TABLE `projects` ADD `collection_schedule` text;

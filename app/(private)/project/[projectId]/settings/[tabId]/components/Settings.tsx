@@ -8,13 +8,16 @@ import { useRouter } from 'next/navigation';
 import { SETTINGS_TABS } from './helpers';
 import CompetitorsSettings from './CompetitorsSettings';
 import Others from './Others';
+import CollectionScheduleSettings from './CollectionScheduleSettings';
 
 export default function Settings({
   projectId,
   selectedSettingsTabId,
+  enabledChatbotCount,
 }: {
   projectId: string;
   selectedSettingsTabId: string;
+  enabledChatbotCount: number;
 }) {
   const router = useRouter();
 
@@ -64,6 +67,9 @@ export default function Settings({
         {selectedSettingsTabId === 'competitors' && <CompetitorsSettings />}
         {selectedSettingsTabId === 'brand' && <BrandSettings />}
         {selectedSettingsTabId === 'organization' && <OrganizationSettingsForm />}
+        {selectedSettingsTabId === 'schedule' && (
+          <CollectionScheduleSettings enabledChatbotCount={enabledChatbotCount} />
+        )}
         {selectedSettingsTabId === 'others' && <Others />}
       </section>
     </div>

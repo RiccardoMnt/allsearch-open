@@ -23,10 +23,16 @@ export async function register() {
 // next boot.
 async function resumeAndStartCollectionRunLoop(): Promise<void> {
   try {
-    const { releaseRunningCollectionRuns, ensureCollectionRunLoopIsRunning } =
-      await import('./libs/collection');
+    const {
+      releaseRunningCollectionRuns,
+      ensureCollectionRunLoopIsRunning,
+      startCollectionScheduler,
+    } = await import('./libs/collection');
     await releaseRunningCollectionRuns();
     ensureCollectionRunLoopIsRunning();
+
+    // After the resume above, so a Run released from a previous kill is not mistaken for none.
+    startCollectionScheduler();
 
     // The mirror image, for the other end of the process's life. `bunx allsearch` runs the server
     // inside the CLI process and owns SIGINT/SIGTERM (issue 20); this is how the server-side work

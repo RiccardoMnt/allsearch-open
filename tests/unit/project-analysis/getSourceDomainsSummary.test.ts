@@ -14,6 +14,7 @@ function makeProject(overrides: Partial<ProjectRow> = {}): ProjectRow {
     aliases: [],
     icon_url: null,
     target_location: null,
+    collection_schedule: null,
     prompts_updated_at: null,
     is_paused: false,
     is_archived: false,

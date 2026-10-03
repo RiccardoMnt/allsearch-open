@@ -220,7 +220,11 @@ describe('migrateDatabase', () => {
     // migration transaction.
     const realMigrationsFolder = join(process.cwd(), 'drizzle');
     const realMigrationNames = readdirSync(realMigrationsFolder).sort();
-    const migrationsBeforeScope = realMigrationNames.slice(0, -1);
+    // By name, not position: later migrations keep landing after this one.
+    const scopeMigrationIndex = realMigrationNames.findIndex((name) =>
+      name.endsWith('_add_collection_runs_scope')
+    );
+    const migrationsBeforeScope = realMigrationNames.slice(0, scopeMigrationIndex);
     const beforeScopeFolder = mkdtempSync(join(tmpdir(), 'allsearch-migrate-scope-'));
     for (const migrationName of migrationsBeforeScope) {
       cpSync(join(realMigrationsFolder, migrationName), join(beforeScopeFolder, migrationName), {
@@ -232,10 +236,13 @@ describe('migrateDatabase', () => {
       db = await createDatabase(dbPath);
       await migrateDatabase(db, dbPath, beforeScopeFolder);
 
-      const [project] = await db
-        .insert(projects)
-        .values({ url: 'https://example.com', name: 'Example', aliases: [] })
-        .returning();
+      // Raw SQL for the same reason as the Runs below: the `projects` builder reflects today's
+      // schema, which has columns this migration state does not.
+      const project = { id: 'project-1' };
+      await db.run(sql`
+        INSERT INTO projects (id, created_at, updated_at, url, name, aliases)
+        VALUES (${project.id}, '2026-01-01T00:00:00Z', '2026-01-01T00:00:00Z', 'https://example.com', 'Example', '[]')
+      `);
       await db.run(sql`
         INSERT INTO topics (id, created_at, updated_at, name, project_id, is_archived)
         VALUES ('topic-1', '2026-01-01T00:00:00Z', '2026-01-01T00:00:00Z', 'Topic', ${project.id}, 0)

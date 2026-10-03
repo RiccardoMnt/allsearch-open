@@ -23,6 +23,11 @@ export const SETTINGS_TABS: Tab[] = [
     getRoute: (projectId: string) => RouteHelper.Project.Settings.getOrganization(projectId),
   },
   {
+    id: 'schedule',
+    label: 'Schedule',
+    getRoute: (projectId: string) => RouteHelper.Project.Settings.getSchedule(projectId),
+  },
+  {
     id: 'others',
     label: 'Others',
     getRoute: (projectId: string) => RouteHelper.Project.Settings.getOthers(projectId),

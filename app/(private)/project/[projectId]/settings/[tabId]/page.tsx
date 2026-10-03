@@ -5,6 +5,7 @@ import { Settings as SettingsIcon } from 'lucide-react';
 import Settings from './components/Settings';
 import { SETTINGS_TABS } from './components/helpers';
 import { redirect } from 'next/navigation';
+import { getEffectiveEnabledChatbotIds } from '@/libs/database/Settings/queries';
 
 type Props = {
   params: Promise<{ projectId: string; tabId: string }>;
@@ -29,7 +30,11 @@ export default async function ProjectSettingsPage({ params }: Props) {
         icon={SettingsIcon}
         description="Configure your project to control what gets monitored."
       />
-      <Settings projectId={projectId} selectedSettingsTabId={tabId} />
+      <Settings
+        projectId={projectId}
+        selectedSettingsTabId={tabId}
+        enabledChatbotCount={(await getEffectiveEnabledChatbotIds()).length}
+      />
     </MainContainer>
   );
 }

@@ -7,6 +7,7 @@ import type { StoredProviderKey } from './Settings/types';
 import type { ChatbotId } from './shared/ChatbotId';
 import type { ProviderId } from './shared/ProviderId';
 import type { PageHeading } from '@/libs/utils/urlAnalysis';
+import type { CollectionSchedule } from '@/libs/collection/schedule';
 
 // Shared column conventions (see docs/adr/0006-sqlite-with-drizzle.md):
 // - UUID primary keys kept as TEXT.
@@ -87,6 +88,9 @@ export const projects = sqliteTable(
     is_paused: integer('is_paused', { mode: 'boolean' }).notNull().default(false),
     is_archived: integer('is_archived', { mode: 'boolean' }).notNull().default(false),
     target_location: text('target_location'),
+    // `null` = no schedule (the default): this Project collects only when the user asks (ADR
+    // 0002). Set = it collects on its own while the app is open (ADR 0011).
+    collection_schedule: text('collection_schedule', { mode: 'json' }).$type<CollectionSchedule>(),
   },
   (table) => [index('projects_is_archived_created_at_idx').on(table.is_archived, table.created_at)]
 );

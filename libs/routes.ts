@@ -81,6 +81,7 @@ export const ROUTES = {
       PROJECT_ARCHIVE: '/api/project/:projectId/archive',
       PROJECT_CLONE: '/api/project/:projectId/clone',
       PROJECT_PAUSE: '/api/project/:projectId/pause',
+      PROJECT_COLLECTION_SCHEDULE: '/api/project/:projectId/collection-schedule',
       PROJECT_DELETE: '/api/project/:projectId/delete',
       PROJECT_FILL_PROMPT_RESPONSES: '/api/project/:projectId/fill-prompt-responses',
       PROMPTS: '/api/project/:projectId/prompts',
@@ -266,6 +267,8 @@ export const RouteHelper = {
           ':tabId',
           'organization'
         ),
+      getSchedule: (projectId: string) =>
+        ROUTES.PROJECT.SETTINGS_TAB.replace(':projectId', projectId).replace(':tabId', 'schedule'),
       getOthers: (projectId: string) =>
         ROUTES.PROJECT.SETTINGS_TAB.replace(':projectId', projectId).replace(':tabId', 'others'),
     },
@@ -327,6 +330,8 @@ export const RouteHelper = {
     Project: {
       getProject: (projectId: string) =>
         ROUTES.API.PROJECT.PROJECT.replace(':projectId', projectId),
+      getCollectionSchedule: (projectId: string) =>
+        ROUTES.API.PROJECT.PROJECT_COLLECTION_SCHEDULE.replace(':projectId', projectId),
       getProjectArchive: (projectId: string) =>
         ROUTES.API.PROJECT.PROJECT_ARCHIVE.replace(':projectId', projectId),
       getPrompts: (
